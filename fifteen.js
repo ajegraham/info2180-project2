@@ -36,7 +36,7 @@ window.onload = function(e){
   shuffleButton.onclick = function(){
     sixteen =  shuffle(sixteen);
     counter = 0;
-	displayTimer();
+	display();
     startTimer();
   }
 
@@ -50,11 +50,11 @@ window.onload = function(e){
   //Function used to increment timer
   function update() {
     counter += inc();
-    displayTimer();
+    display();
   }
 
-  function displayTimer() {
-    timer.innerHTML = "<br>Total Moves Made: " + moves + "<br> Duration: " + parseInt(counter/1000) + " second(s)";
+  function display() {
+    timer.innerHTML = "<br> Duration: " + parseInt(counter/1000) + " second(s)" + "<br>Total Moves Made: " + moves ;
   }
 
   //Helper function used to increment timer
@@ -70,11 +70,7 @@ function createTimer() {
   return document.createElement("span");
 }
 
-/*
- *  This function is used for the initial set up of the playing area.
- *  The playing area starts in the completed arangement with the blank
- *  space at the bottom right.
- */
+//This function sets up of the initial solved puzzle
 function overall(){
   var puzzle = document.getElementById("puzzlearea");
   var squares = puzzle.getElementsByTagName("div");
@@ -90,7 +86,7 @@ function overall(){
     squares[i].style.right = "0px";
     squares[i].style.bottom = "0px";
     squares[i].style.left = "0px";
-    //Condition used to vary X & Y cordinates to properly display background picture
+
     if (bgCordinateX != -300 ){
       bgCordinateX -= 100;
     }
@@ -102,7 +98,7 @@ function overall(){
   //Initializes movable pieces of the puzzle.
   squares[11].className =("puzzlepiece movablepiece");
   squares[14].className =("puzzlepiece movablepiece");
-  //Returns initial layout of the playing Area, the relative positions of each Puzzle Piece
+  //Returns initial layout of the puzzle, the relative positions of each square
   return [  [null,2,5,null], [null,3,6,1], [null,4,7,2], [null,null,8,3], 
             [1,6,9,null], [2,7,10,5], [3,8,11,6], [4,null,12,7], 
             [5,10,13,null], [6,11,14,9], [7,12,15,10], [8,null,16,11], 
@@ -131,7 +127,7 @@ function moveSquare(sixteen, element) {
 
 //Function used to adjust movable pieces.
 //Adds class that makes them highlight on hover. 
-function fixMovability(whiteSquare){
+function movableSquare(whiteSquare){
   var puzzle = document.getElementById("puzzlearea");
   var squares = puzzle.getElementsByTagName("div");
 
@@ -153,18 +149,24 @@ function squareDown(sixteen, element, squares){
   //Increases the distance from the margin by 100px
   squares[element - 1].style.top = (topVal + 100) + "px"; 
   //Modifies layout of tiles in the Playing Area
-  if ( sixteen[element - 1][0] != null){ sixteen[sixteen[element - 1][0] -1][2] = 16 }
-  if ( sixteen[element - 1][1] != null){ sixteen[sixteen[element - 1][1] -1][3] = 16 }
-  if ( sixteen[element - 1][3] != null){ sixteen[sixteen[element - 1][3] -1][1] = 16 }
-  if ( sixteen[16 - 1][1] != null){ sixteen[sixteen[16 - 1][1] -1][3] = sixteen[16 - 1][0] }
-  if ( sixteen[16 - 1][2] != null){ sixteen[sixteen[16 - 1][2] -1][0] = sixteen[16 - 1][0] }
-  if ( sixteen[16 - 1][3] != null){ sixteen[sixteen[16 - 1][3] -1][1] = sixteen[16 - 1][0] }      
+  if ( sixteen[element - 1][0] != null){ 
+	sixteen[sixteen[element - 1][0] -1][2] = 16 }
+  if ( sixteen[element - 1][1] != null){ 
+	sixteen[sixteen[element - 1][1] -1][3] = 16 }
+  if ( sixteen[element - 1][3] != null){ 
+	sixteen[sixteen[element - 1][3] -1][1] = 16 }
+  if ( sixteen[16 - 1][1] != null){ 
+	sixteen[sixteen[16 - 1][1] -1][3] = sixteen[16 - 1][0] }
+  if ( sixteen[16 - 1][2] != null){ 
+	sixteen[sixteen[16 - 1][2] -1][0] = sixteen[16 - 1][0] }
+  if ( sixteen[16 - 1][3] != null){ 
+	sixteen[sixteen[16 - 1][3] -1][1] = sixteen[16 - 1][0] }      
   var swap = sixteen[element - 1];
   sixteen[element - 1] = sixteen[15];
   sixteen[element - 1][0] = 16;
   sixteen[15] = swap; 
   sixteen[15][2] = parseInt(element, 10);
-  fixMovability(sixteen[15]);
+  movableSquare(sixteen[15]);
   return sixteen;
 }
 
@@ -175,18 +177,24 @@ function squareUp(sixteen, element, squares){
   //Decreases the distance from the margin by 100px
   squares[element - 1].style.top = (topVal - 100) + "px"; 
   //Modifies layout of tiles in the Playing Area
-  if ( sixteen[element - 1][2] != null){ sixteen[sixteen[element - 1][2] -1][0] = 16 }
-  if ( sixteen[element - 1][1] != null){ sixteen[sixteen[element - 1][1] -1][3] = 16 }
-  if ( sixteen[element - 1][3] != null){ sixteen[sixteen[element - 1][3] -1][1] = 16 }
-  if ( sixteen[16 - 1][1] != null){ sixteen[sixteen[16 - 1][1] -1][3] = sixteen[16 - 1][2] }
-  if ( sixteen[16 - 1][0] != null){ sixteen[sixteen[16 - 1][0] -1][2] = sixteen[16 - 1][2] }
-  if ( sixteen[16 - 1][3] != null){ sixteen[sixteen[16 - 1][3] -1][1] = sixteen[16 - 1][2] }  
+  if ( sixteen[element - 1][2] != null){ 
+	sixteen[sixteen[element - 1][2] -1][0] = 16 }
+  if ( sixteen[element - 1][1] != null){ 
+	sixteen[sixteen[element - 1][1] -1][3] = 16 }
+  if ( sixteen[element - 1][3] != null){ 
+	sixteen[sixteen[element - 1][3] -1][1] = 16 }
+  if ( sixteen[16 - 1][1] != null){ 
+	sixteen[sixteen[16 - 1][1] -1][3] = sixteen[16 - 1][2] }
+  if ( sixteen[16 - 1][0] != null){ 
+	sixteen[sixteen[16 - 1][0] -1][2] = sixteen[16 - 1][2] }
+  if ( sixteen[16 - 1][3] != null){ 
+	sixteen[sixteen[16 - 1][3] -1][1] = sixteen[16 - 1][2] }  
   var swap = sixteen[element -1];
   sixteen[element - 1] = sixteen[15];
   sixteen[element - 1][2] = 16;
   sixteen[15] = swap; 
   sixteen[15][0] = parseInt(element, 10);
-  fixMovability(sixteen[15]);
+  movableSquare(sixteen[15]);
   return sixteen;
 }
 
@@ -197,18 +205,24 @@ function squareRight(sixteen, element, squares){
   //Increases the distance from the margin by 100px
   squares[element - 1].style.left = (leftVal + 100) + "px"; 
  //Modifies layout of tiles in the Playing Area
-  if ( sixteen[element - 1][0] != null){ sixteen[sixteen[element - 1][0] -1][2] = 16 }
-  if ( sixteen[element - 1][2] != null){ sixteen[sixteen[element - 1][2] -1][0] = 16 }
-  if ( sixteen[element - 1][3] != null){ sixteen[sixteen[element - 1][3] -1][1] = 16 }
-  if ( sixteen[16 - 1][0] != null){ sixteen[sixteen[16 - 1][0] -1][2] = sixteen[16 - 1][3] }
-  if ( sixteen[16 - 1][1] != null){ sixteen[sixteen[16 - 1][1] -1][3] = sixteen[16 - 1][3] }
-  if ( sixteen[16 - 1][2] != null){ sixteen[sixteen[16 - 1][2] -1][0] = sixteen[16 - 1][3] } 
+  if ( sixteen[element - 1][0] != null){ 
+	sixteen[sixteen[element - 1][0] -1][2] = 16 }
+  if ( sixteen[element - 1][2] != null){ 
+	sixteen[sixteen[element - 1][2] -1][0] = 16 }
+  if ( sixteen[element - 1][3] != null){ 
+	sixteen[sixteen[element - 1][3] -1][1] = 16 }
+  if ( sixteen[16 - 1][0] != null){ 
+	sixteen[sixteen[16 - 1][0] -1][2] = sixteen[16 - 1][3] }
+  if ( sixteen[16 - 1][1] != null){ 
+	sixteen[sixteen[16 - 1][1] -1][3] = sixteen[16 - 1][3] }
+  if ( sixteen[16 - 1][2] != null){ 
+	sixteen[sixteen[16 - 1][2] -1][0] = sixteen[16 - 1][3] } 
   var swap = sixteen[element - 1];
   sixteen[element - 1] = sixteen[15];
   sixteen[element - 1][3] = 16;
   sixteen[15] = swap; 
   sixteen[15][1] = parseInt(element, 10);
-  self.fixMovability(sixteen[15]);
+  self.movableSquare(sixteen[15]);
   return sixteen;
 }
 
@@ -219,18 +233,24 @@ function squareLeft(sixteen, element, squares){
   //Increases the distance from the margin by 100px
   squares[element - 1].style.left = (leftVal - 100) + "px"; 
   //Modifies layout of tiles in the Playing Area
-  if ( sixteen[element - 1][0] != null){ sixteen[sixteen[element - 1][0] -1][2] = 16 }
-  if ( sixteen[element - 1][1] != null){ sixteen[sixteen[element - 1][1] -1][3] = 16 }
-  if ( sixteen[element - 1][2] != null){ sixteen[sixteen[element - 1][2] -1][0] = 16 }
-  if ( sixteen[16 - 1][0] != null){ sixteen[sixteen[16 - 1][0] -1][2] = sixteen[16 - 1][1] }
-  if ( sixteen[16 - 1][2] != null){ sixteen[sixteen[16 - 1][2] -1][0] = sixteen[16 - 1][1] }
-  if ( sixteen[16 - 1][3] != null){ sixteen[sixteen[16 - 1][3] -1][1] = sixteen[16 - 1][1] } 
+  if ( sixteen[element - 1][0] != null){ 
+	sixteen[sixteen[element - 1][0] -1][2] = 16 }
+  if ( sixteen[element - 1][1] != null){ 
+	sixteen[sixteen[element - 1][1] -1][3] = 16 }
+  if ( sixteen[element - 1][2] != null){ 
+	sixteen[sixteen[element - 1][2] -1][0] = 16 }
+  if ( sixteen[16 - 1][0] != null){ 
+	sixteen[sixteen[16 - 1][0] -1][2] = sixteen[16 - 1][1] }
+  if ( sixteen[16 - 1][2] != null){ 
+	sixteen[sixteen[16 - 1][2] -1][0] = sixteen[16 - 1][1] }
+  if ( sixteen[16 - 1][3] != null){ 
+	sixteen[sixteen[16 - 1][3] -1][1] = sixteen[16 - 1][1] } 
   var swap = sixteen[element - 1];
   sixteen[element - 1] = sixteen[15];
   sixteen[element - 1][1] = 16;
   sixteen[15] = swap; 
   sixteen[15][3] = parseInt(element, 10);
-  fixMovability(sixteen[15]);
+  movableSquare(sixteen[15]);
   return sixteen;
 }
 
